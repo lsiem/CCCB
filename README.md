@@ -98,4 +98,4 @@ pytest tests/ --cov=cccb --cov-report=term-missing
 
 ## Lizenz
 
-ITSC GmbH - Interne Nutzung
+MIT
