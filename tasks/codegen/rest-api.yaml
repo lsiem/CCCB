@@ -1,0 +1,50 @@
+name: "REST API erstellen"
+category: "codegen"
+description: "Implement a FastAPI REST API with CRUD operations for a simple resource. The API should include proper error handling, request validation, and comprehensive tests."
+prompt: |
+  Create a FastAPI REST API application with the following requirements:
+  
+  1. Implement a simple "Task" resource with fields: id (int), title (str), description (str), completed (bool)
+  2. Create the following endpoints:
+     - POST /tasks - Create a new task
+     - GET /tasks - List all tasks with optional filtering by completed status
+     - GET /tasks/{task_id} - Get a specific task by ID
+     - PUT /tasks/{task_id} - Update a task
+     - DELETE /tasks/{task_id} - Delete a task
+  
+  3. Use Pydantic models for request/response validation
+  4. Include proper error handling (404 for missing tasks, 400 for invalid data)
+  5. Store tasks in memory (no database needed)
+  6. Write comprehensive pytest tests covering all endpoints
+  7. Ensure the application can be run with `python main.py` and starts on localhost:8000
+  
+  Requirements:
+  - Main file must be named main.py
+  - Code must follow PEP 8 style guidelines
+  - All functions should have docstrings
+  - Tests should achieve at least 80% code coverage
+
+setup_files: []
+
+checks:
+  - type: "file_exists"
+    path: "main.py"
+  - type: "command"
+    run: "python -m py_compile main.py"
+    expect_exit_code: 0
+  - type: "command"
+    run: "python -m pytest tests/ -v --tb=short"
+    expect_exit_code: 0
+
+judge:
+  criteria:
+    - "Korrektheit: API endpoints are implemented correctly and respond with proper status codes"
+    - "Validierung: Request/response validation using Pydantic models is properly implemented"
+    - "Code-Struktur: Code is well-organized, modular, and follows best practices"
+    - "Vollstaendigkeit: All required endpoints are implemented with proper error handling"
+  scale: "1-10"
+
+claude_settings:
+  max_turns: 15
+  allowed_tools: ["Edit", "Write", "Bash"]
+  timeout: 300

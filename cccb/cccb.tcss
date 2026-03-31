@@ -1,0 +1,24 @@
+Screen {
+background: $surface ;
+}
+
+#header {
+dock: top                    ;
+height: 3                    ;
+content-align: center middle ;
+background: $primary         ;
+color: $text                 ;
+text-style: bold             ;
+}
+
+.config-list { height: 1fr        ; border: solid $primary; padding: 1; }
+.config-preview { height: 1fr     ; border: solid $secondary; padding: 1; }
+.task-filter { height: 3          ; layout: horizontal; }
+.task-filter Button { margin: 0 1 ; }
+.progress-section { height: auto  ; padding: 1; }
+.run-log { height: 1fr            ; border: solid $primary; padding: 1; }
+.results-table { height: 1fr      ; }
+.winner-banner { height: 3        ; content-align: center middle; background: $success; color: $text; text-style: bold; }
+.btn-row { height: 3              ; layout: horizontal; align: center middle; }
+.btn-row Button { margin: 0 2     ; }
+.config-status { height: auto     ; min-height: 1; color: $error; text-style: italic; }

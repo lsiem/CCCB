@@ -1,0 +1,62 @@
+name: "Click CLI Tool"
+category: "codegen"
+description: "Implement a Click-based CLI tool with multiple subcommands for text processing. The tool should handle errors gracefully and provide comprehensive test coverage."
+prompt: |
+  Create a Click-based CLI tool with the following requirements:
+  
+  1. Implement a CLI application called `textool` with three subcommands:
+     - `search <pattern> <file>` - Search for lines containing pattern in file (case-insensitive)
+     - `replace <old> <new> <file>` - Replace all occurrences of old with new in file
+     - `count <pattern> <file>` - Count occurrences of pattern in file
+  
+  2. For each command:
+     - Validate that the file exists
+     - Handle errors gracefully with informative messages
+     - Return appropriate exit codes (0 for success, 1 for errors)
+     - Print results to stdout
+  
+  3. Implementation requirements:
+     - Main entry point must work with `python main.py` or `python -m textool`
+     - All commands must support `--help` flag
+     - Use Click decorators and type hints properly
+     - Include error handling for file I/O and invalid input
+  
+  4. Write comprehensive pytest tests:
+     - Test each command with valid input
+     - Test each command with missing files
+     - Test help output
+     - Test with edge cases (empty files, no matches)
+  
+  Requirements:
+  - Main file must be named main.py
+  - Code must follow PEP 8
+  - All functions should have docstrings
+  - Minimum 85% test coverage
+
+setup_files: []
+
+checks:
+  - type: "file_exists"
+    path: "main.py"
+  - type: "command"
+    run: "python -m py_compile main.py"
+    expect_exit_code: 0
+  - type: "command"
+    run: "python main.py --help"
+    expect_exit_code: 0
+  - type: "command"
+    run: "python -m pytest tests/ -v --tb=short"
+    expect_exit_code: 0
+
+judge:
+  criteria:
+    - "CLI-Design: CLI interface is intuitive with clear subcommands and help output"
+    - "Korrektheit: Commands work correctly with valid and invalid inputs"
+    - "Error Handling: Errors are handled gracefully with informative messages"
+    - "Testabdeckung: Tests cover normal cases, edge cases, and error conditions"
+  scale: "1-10"
+
+claude_settings:
+  max_turns: 15
+  allowed_tools: ["Edit", "Write", "Bash"]
+  timeout: 300

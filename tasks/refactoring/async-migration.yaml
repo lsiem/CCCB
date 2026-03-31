@@ -1,0 +1,58 @@
+name: "Async Migration"
+category: "refactoring"
+description: "Refactor a synchronous HTTP fetching application to use async/await. The current implementation uses blocking urllib.request calls, limiting concurrent request handling."
+prompt: |
+  A synchronous HTTP fetching module has been provided in fetcher.py. The module currently uses blocking urllib.request calls, which limits performance when handling multiple concurrent requests.
+  
+  Your task:
+  1. Refactor the fetcher.py module to use async/await with asyncio:
+     - Convert fetch_url() to async
+     - Convert fetch_multiple() to fetch URLs concurrently using asyncio.gather()
+     - Convert fetch_with_retry() to async with retry logic
+     - Use aiohttp (or urllib with asyncio) for async HTTP requests
+  
+  2. Refactoring requirements:
+     - All functions must be properly async
+     - Implement concurrent fetching for fetch_multiple()
+     - Maintain error handling from the original implementation
+     - Keep function signatures compatible where possible
+     - Add type hints for all functions
+  
+  3. Write comprehensive async tests:
+     - Test individual async functions
+     - Verify concurrent execution improves performance
+     - Test error handling in async context
+     - Ensure proper resource cleanup (context managers)
+  
+  4. Code quality:
+     - All functions should have docstrings
+     - Proper use of async context managers
+     - No blocking calls in async code
+     - Proper exception handling
+
+setup_files:
+  - source: "fixtures/sync-to-async/fetcher.py"
+    target: "fetcher.py"
+  - source: "fixtures/sync-to-async/test_fetcher.py"
+    target: "test_fetcher.py"
+
+checks:
+  - type: "command"
+    run: "python -m py_compile fetcher.py"
+    expect_exit_code: 0
+  - type: "command"
+    run: "python -m pytest test_fetcher.py -v --tb=short"
+    expect_exit_code: 0
+
+judge:
+  criteria:
+    - "Async-Korrektheit: Functions are properly async and use async/await correctly"
+    - "Parallelisierung: Concurrent requests are executed in parallel for performance"
+    - "Error Handling: Error handling works correctly in async context"
+    - "Testqualitaet: Tests properly verify async behavior and performance improvements"
+  scale: "1-10"
+
+claude_settings:
+  max_turns: 15
+  allowed_tools: ["Edit", "Write", "Bash"]
+  timeout: 300

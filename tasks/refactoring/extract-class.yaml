@@ -1,0 +1,57 @@
+name: "God Object Refactoring"
+category: "refactoring"
+description: "Refactor a monolithic AppManager class into multiple focused, single-responsibility classes. The current implementation mixes user management, email sending, logging, and configuration concerns."
+prompt: |
+  An AppManager class has been provided in app.py. This class is a 'God Object' that handles too many responsibilities: user management, email sending, logging, and configuration management.
+  
+  Your task:
+  1. Refactor the AppManager class into at least 3 separate, focused classes:
+     - UserManager: Handle user creation, authentication, and listing
+     - EmailManager: Handle email operations (send_email, send_welcome)
+     - ConfigManager: Handle configuration operations (load_config, get_setting, update_setting)
+     - (Optional) LoggerManager: Handle logging operations
+  
+  2. Refactoring requirements:
+     - Each class should have a single, well-defined responsibility
+     - Classes should be loosely coupled (use dependency injection if needed)
+     - Public interfaces should remain compatible with existing tests
+     - Internal implementation details may change
+     - All shared state should be properly managed
+  
+  3. Write comprehensive tests that verify:
+     - Each class works independently
+     - Classes integrate correctly
+     - Existing functionality is preserved
+  
+  4. Use Python best practices:
+     - Type hints for all methods
+     - Docstrings for all public methods
+     - Proper error handling
+     - No circular dependencies
+
+setup_files:
+  - source: "fixtures/god-object/app.py"
+    target: "app.py"
+  - source: "fixtures/god-object/test_app.py"
+    target: "test_app.py"
+
+checks:
+  - type: "command"
+    run: "python -m py_compile app.py"
+    expect_exit_code: 0
+  - type: "command"
+    run: "python -m pytest test_app.py -v --tb=short"
+    expect_exit_code: 0
+
+judge:
+  criteria:
+    - "Separation of Concerns: Responsibilities are properly separated into focused classes"
+    - "Interface-Design: Public interfaces are clean, intuitive, and well-documented"
+    - "Backward Compatibility: Existing tests pass without modification"
+    - "Code-Qualitaet: Code is well-structured, typed, and follows best practices"
+  scale: "1-10"
+
+claude_settings:
+  max_turns: 15
+  allowed_tools: ["Edit", "Write", "Bash"]
+  timeout: 300

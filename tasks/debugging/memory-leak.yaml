@@ -1,0 +1,49 @@
+name: "Memory Leak Debugging"
+category: "debugging"
+description: "Debug and fix a memory leak in a server application with an unbounded cache. The server caches HTTP request results without any eviction policy, causing memory to grow indefinitely."
+prompt: |
+  A server application has been provided in server.py. The server handles HTTP requests and caches results to improve performance. However, there is a memory leak - the cache grows indefinitely without any eviction policy.
+  
+  Your task:
+  1. Analyze the code to identify the memory leak issue
+  2. Implement a fix that ensures the cache size remains bounded (suggest a maximum of 100 entries)
+  3. Implement at least two of these eviction strategies:
+     - LRU (Least Recently Used)
+     - TTL (Time-To-Live) with expiration
+     - Size-based eviction (remove oldest entries when limit reached)
+  4. Write comprehensive tests that verify:
+     - The cache respects the size limit
+     - Eviction policies work correctly
+     - The server continues to work with the fix
+  5. Document your changes with clear comments
+  
+  Requirements:
+  - Fix must not break existing functionality
+  - Server should remain compatible with the existing test suite
+  - All tests must pass
+  - Code must be syntactically valid Python
+
+setup_files:
+  - source: "fixtures/memory-leak/server.py"
+    target: "server.py"
+
+checks:
+  - type: "command"
+    run: "python -m py_compile server.py"
+    expect_exit_code: 0
+  - type: "command"
+    run: "python -m pytest tests/ -v --tb=short"
+    expect_exit_code: 0
+
+judge:
+  criteria:
+    - "Diagnose: The memory leak issue is correctly identified and explained"
+    - "Fix-Qualitaet: The fix effectively bounds the cache size and is well-implemented"
+    - "Erklaerung: Changes are well-documented and easy to understand"
+    - "Test: Tests adequately verify the fix works and maintains functionality"
+  scale: "1-10"
+
+claude_settings:
+  max_turns: 15
+  allowed_tools: ["Edit", "Write", "Bash"]
+  timeout: 300

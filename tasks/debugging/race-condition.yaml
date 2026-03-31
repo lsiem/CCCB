@@ -1,0 +1,47 @@
+name: "Race Condition Debugging"
+category: "debugging"
+description: "Debug and fix a race condition in a multi-threaded counter application. The ThreadSafeCounter class has a critical bug where read-modify-write operations are not atomic."
+prompt: |
+  A ThreadSafeCounter class has been provided in counter.py. The counter is intended to be thread-safe, but there is a race condition that causes incorrect counts when multiple threads increment simultaneously.
+  
+  Your task:
+  1. Analyze the code to identify the race condition
+  2. Explain why the current implementation is not thread-safe
+  3. Implement a fix using proper thread synchronization (use threading.Lock)
+  4. Write stress tests that:
+     - Spawn multiple threads that simultaneously increment the counter
+     - Verify the final count is correct
+     - Demonstrate that the race condition is fixed
+  5. Document your changes with clear comments
+  
+  Requirements:
+  - The fix must use proper locking mechanisms
+  - All threads must be properly managed and joined
+  - The counter must maintain correctness under concurrent access
+  - Code must be syntactically valid Python
+  - All tests must pass
+
+setup_files:
+  - source: "fixtures/race-condition/counter.py"
+    target: "counter.py"
+
+checks:
+  - type: "command"
+    run: "python -m py_compile counter.py"
+    expect_exit_code: 0
+  - type: "command"
+    run: "python -m pytest tests/ -v --tb=short"
+    expect_exit_code: 0
+
+judge:
+  criteria:
+    - "Diagnose: The race condition is correctly identified and root cause explained"
+    - "Fix: The fix properly synchronizes access and prevents the race condition"
+    - "Erklaerung: Documentation clearly explains the problem and solution"
+    - "Stresstest: Tests effectively demonstrate the fix under concurrent load"
+  scale: "1-10"
+
+claude_settings:
+  max_turns: 15
+  allowed_tools: ["Edit", "Write", "Bash"]
+  timeout: 300
